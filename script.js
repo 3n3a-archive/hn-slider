@@ -27,7 +27,14 @@ async function loadHN(type = "news", page=1) {
   console.log('started loading posts')
   let e = document.getElementById('cardholder')
   let baseUrl = `https://hackerfeed.dev/${type}?page=${page}`
-  let apiRes = await fetch(baseUrl)
+  let apiRes = await fetch(baseUrl, {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'omit',
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+    })
   let apiJson = await apiRes.json()
   for(const post of apiJson) {
     console.log(post)
