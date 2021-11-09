@@ -1,11 +1,5 @@
 'use strict';
 
-var tinderContainer = document.querySelector('.tinder');
-var allCards = document.querySelectorAll('.tinder--card');
-var nope = document.getElementById('nope');
-var love = document.getElementById('love');
-let htmlTemplate = '<a href="{1}"><div class="tinder--card"><img src="{3}"><h3>{2}</h3><p>This is a demo for Tinder like swipe cards</p></div></a>' // 1: x.url 2: x.title 3: x.image_url
-
 /* Function to format strings like in Python */
 function format(fmt, ...args) {
     if (!fmt.match(/^(?:(?:(?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{[0-9]+\}))+$/)) {
@@ -42,6 +36,9 @@ async function loadHN(type = "news", page=1) {
   }
 }
 
+loadHN.then(main())
+
+function main() {
 function initCards(card, index) {
   var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
 
@@ -54,7 +51,6 @@ function initCards(card, index) {
   tinderContainer.classList.add('loaded');
 }
 
-loadHN()
 initCards();
 
 allCards.forEach(function (el) {
@@ -133,3 +129,4 @@ var loveListener = createButtonListener(true);
 
 nope.addEventListener('click', nopeListener);
 love.addEventListener('click', loveListener);
+}
