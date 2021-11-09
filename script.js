@@ -1,3 +1,10 @@
+var tinderContainer = document.querySelector('.tinder');
+var allCards = document.querySelectorAll('.tinder--card');
+var nope = document.getElementById('nope');
+var love = document.getElementById('love');
+let htmlTemplate = '<a href="{1}"><div class="tinder--card"><img src="{3}"><h3>{2}</h3><p>This is a demo for Tinder like swipe cards</p></div></a>' // 1: x.url 2: x.title 3: x.image_url
+
+
 /* Function to format strings like in Python */
 function format(fmt, ...args) {
     if (!fmt.match(/^(?:(?:(?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{[0-9]+\}))+$/)) {
@@ -37,28 +44,44 @@ async function loadHN(type = "news", page=1) {
     .then(main())
   }
 
+function initCards(card, index) {
+  var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
+
+  newCards.forEach(function (card, index) {
+    card.style.zIndex = allCards.length - index;
+    card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 30 * index + 'px)';
+    card.style.opacity = (10 - index) / 10;
+  });
+  
+  tinderContainer.classList.add('loaded');
+}
+
+function createButtonListener(love) {
+  return function (event) {
+    var cards = document.querySelectorAll('.tinder--card:not(.removed)');
+    var moveOutWidth = document.body.clientWidth * 1.5;
+
+    if (!cards.length) return false;
+
+    var card = cards[0];
+
+    card.classList.add('removed');
+
+    if (love) {
+      card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
+    } else {
+      card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
+    }
+
+    initCards();
+
+    event.preventDefault();
+  };
+}
+
 loadHN();
 
 function main() {
-  var tinderContainer = document.querySelector('.tinder');
-  var allCards = document.querySelectorAll('.tinder--card');
-  var nope = document.getElementById('nope');
-  var love = document.getElementById('love');
-  let htmlTemplate = '<a href="{1}"><div class="tinder--card"><img src="{3}"><h3>{2}</h3><p>This is a demo for Tinder like swipe cards</p></div></a>' // 1: x.url 2: x.title 3: x.image_url
-    
-
-  function initCards(card, index) {
-    var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
-
-    newCards.forEach(function (card, index) {
-      card.style.zIndex = allCards.length - index;
-      card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 30 * index + 'px)';
-      card.style.opacity = (10 - index) / 10;
-    });
-    
-    tinderContainer.classList.add('loaded');
-  }
-
   initCards();
 
   allCards.forEach(function (el) {
@@ -108,29 +131,6 @@ function main() {
       }
     });
   });
-
-  function createButtonListener(love) {
-    return function (event) {
-      var cards = document.querySelectorAll('.tinder--card:not(.removed)');
-      var moveOutWidth = document.body.clientWidth * 1.5;
-
-      if (!cards.length) return false;
-
-      var card = cards[0];
-
-      card.classList.add('removed');
-
-      if (love) {
-        card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
-      } else {
-        card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
-      }
-
-      initCards();
-
-      event.preventDefault();
-    };
-  }
 
   var nopeListener = createButtonListener(false);
   var loveListener = createButtonListener(true);
