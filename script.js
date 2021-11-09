@@ -1,8 +1,3 @@
-var tinderContainer = document.querySelector('.tinder');
-var allCards = document.querySelectorAll('.tinder--card');
-var nope = document.getElementById('nope');
-var love = document.getElementById('love');
-
 async function loadHN(type = "news", page=1) {
   console.log('started loading posts')
   let e = document.getElementById('cardholder')
@@ -16,17 +11,57 @@ async function loadHN(type = "news", page=1) {
         referrerPolicy: 'no-referrer',
     })
     .then(res => res.json())
-    .then((data) => {
+    .then(async (data) => {
       for(const post of data) {
-        console.log(post)
-        e.inserAdjacentHTML('beforeend', `<a href="${post.url}"><div class="tinder--card"><img src="${post.image_url}"><h3>${post.title}</h3><p>This is a demo for Tinder like swipe cards</p></div></a>`)
+        // console.log(post)
+        let lp = await getLinkPreview(post.url)
+        e.innerHTML += `<div class="tinder--card" data-url="${post.url}" data-title="${post.title}"><img src="${post.image_url ? post.image_url : lp.image}"><h3>${post.title}</h3><p>${lp.description ? lp.description : `<a href="${post.url}">${post.domain}</a>`}</p></div>`
       }
+      main()
     })
-    .then(main())
   }
+
+async function getLinkPreview(url) {
+  try {
+    let apiKey = "3756e0341fa1edf43b23bff4e09baad1"
+    let res = await fetch(`https://api.linkpreview.net/?key=${apiKey}&q=${url}`)
+    let json = await res.json()
+    return json
+  } catch (error) {
+    return null
+  }
+  
+}
+
+async function getLinkPeek(url) {
+  try {
+    let apiKey = "987bed17-eba9-4fd1-b691-08187e30e847"
+    let res = await fetch(`https://api.peekalink.io/`, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'omit',
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      headers: {
+        'X-API-Key':apiKey, 
+        'Content-Type':'application/json'
+      }, 
+      body: JSON.stringify({
+        "link": url
+      })
+    })
+    let json = await res.json()
+    return json
+  } catch (error) {
+    return null
+  }
+}
 
 function initCards(card, index) {
   var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
+  var allCards = document.querySelectorAll('.tinder--card');
+  var tinderContainer = document.querySelector('.tinder');
 
   newCards.forEach(function (card, index) {
     card.style.zIndex = allCards.length - index;
@@ -50,6 +85,7 @@ function createButtonListener(love) {
 
     if (love) {
       card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
+      window.open(card.dataset.url,card.dataset.title)
     } else {
       card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
     }
@@ -63,6 +99,10 @@ function createButtonListener(love) {
 loadHN();
 
 function main() {
+  var tinderContainer = document.querySelector('.tinder');
+  var allCards = document.querySelectorAll('.tinder--card');
+  var nope = document.getElementById('nope');
+  var love = document.getElementById('love');
   initCards();
 
   allCards.forEach(function (el) {
@@ -108,6 +148,13 @@ function main() {
         var rotate = xMulti * yMulti;
 
         event.target.style.transform = 'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
+
+        if (toX > 0) {
+          // love
+          window.open(event.target.dataset.url,event.target.dataset.title)
+        } else {
+          // no love
+        }
         initCards();
       }
     });
