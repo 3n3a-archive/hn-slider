@@ -15,22 +15,18 @@ async function loadHN(type = "news", page=1) {
       for(const post of data) {
         // console.log(post)
         let lp = await getLinkPreview(post.url)
-        e.innerHTML += `<div class="tinder--card" data-url="${post.url}" data-title="${post.title}"><img src="${post.image_url ? post.image_url : lp.image}"><h3>${post.title}</h3><p>${lp.description ? lp.description : `<a href="${post.url}">${post.domain}</a>`}</p></div>`
+        e.innerHTML += `<div class="tinder--card" data-url="${post.url}" data-title="${post.title}"><img src="${post.image_url ? post.image_url : lp.images[0]}"><h3>${post.title}</h3><p>${lp.description ? lp.description : `<a href="${post.url}">${post.domain}</a>`}</p></div>`
       }
       main()
     })
   }
 
 async function getLinkPreview(url) {
-  try {
-    let apiKey = "3756e0341fa1edf43b23bff4e09baad1"
-    let res = await fetch(`https://api.linkpreview.net/?key=${apiKey}&q=${url}`)
-    let json = await res.json()
-    return json
-  } catch (error) {
-    return null
-  }
-  
+  let baseAPI = window.location.origin + '/lp'
+  let apiKey = "3756e0341fa1edf43b23bff4e09baad1"
+  let res = await fetch(`${baseAPI}?key=${apiKey}&q=${url}`)
+  let json = await res.json()
+  return json
 }
 
 async function getLinkPeek(url) {
