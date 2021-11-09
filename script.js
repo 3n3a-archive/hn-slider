@@ -22,7 +22,7 @@ function format(fmt, ...args) {
     });
 }
 
-async function loadHN(type = "news", page=1) {
+async function loadHN(type = "news", page=1, htmlTemplate) {
   console.log('started loading posts')
   let e = document.getElementById('cardholder')
   let baseUrl = `https://hackerfeed.dev/${type}?page=${page}`
@@ -41,7 +41,7 @@ async function loadHN(type = "news", page=1) {
         e.inserAdjacentHTML('beforeend', format(htmlTemplate, post.url, post.title, post.image_url))
       }
     })
-    .then(main())
+    .then(main(htmlTemplate))
   }
 
 function initCards(card, index) {
@@ -79,9 +79,9 @@ function createButtonListener(love) {
   };
 }
 
-loadHN();
+loadHN(htmlTemplate=htmlTemplate);
 
-function main() {
+function main(htmlTemplate) {
   initCards();
 
   allCards.forEach(function (el) {
