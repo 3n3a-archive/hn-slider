@@ -19,7 +19,7 @@ async function loadHN(type = "news", page=1) {
   console.log('started loading posts')
   let e = document.getElementById('cardholder')
   let baseUrl = `https://hackerfeed.dev/${type}?page=${page}`
-  let apiRes = await fetch(baseUrl, {
+  fetch(baseUrl, {
         method: 'GET',
         mode: 'cors',
         cache: 'no-cache',
@@ -27,14 +27,17 @@ async function loadHN(type = "news", page=1) {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
     })
-  let apiJson = await apiRes.json()
-  for(const post of apiJson) {
-    console.log(post)
-    e.inserAdjacentHTML('beforeend', format(htmlTemplate, post.url, post.title, post.image_url))
+    .then(res => res.json())
+    .then(data => {
+      for(const post of data) {
+        console.log(post)
+        e.inserAdjacentHTML('beforeend', format(htmlTemplate, post.url, post.title, post.image_url))
+      }
+    })
+    .then(main())
   }
-}
 
-loadHN.then(main())
+loadHN();
 
 function main() {
   var tinderContainer = document.querySelector('.tinder');
