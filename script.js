@@ -28,7 +28,7 @@ async function loadHN(type = "news", page=1) {
         referrerPolicy: 'no-referrer',
     })
     .then(res => res.json())
-    .then(data => {
+    .then((data) => {
       for(const post of data) {
         console.log(post)
         e.inserAdjacentHTML('beforeend', format(htmlTemplate, post.url, post.title, post.image_url))
