@@ -25,7 +25,7 @@ function format(fmt, ...args) {
 async function loadHN(type = "news", page=1, htmlTemplate) {
   console.log('started loading posts')
   let e = document.getElementById('cardholder')
-  let baseUrl = `https://hackerfeed.dev/${type}?page=${page}`
+  let baseUrl = 'https://hackerfeed.dev/'+type+'?page='+page
   fetch(baseUrl, {
         method: 'GET',
         mode: 'cors',
