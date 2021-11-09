@@ -22,7 +22,7 @@ function format(fmt, ...args) {
     });
 }
 
-async function loadHN(type = "news", page=1, htmlTemplate) {
+async function loadHN(htmlTemplate, type = "news", page=1) {
   console.log('started loading posts')
   let e = document.getElementById('cardholder')
   let baseUrl = 'https://hackerfeed.dev/'+type+'?page='+page
