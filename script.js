@@ -2,27 +2,8 @@ var tinderContainer = document.querySelector('.tinder');
 var allCards = document.querySelectorAll('.tinder--card');
 var nope = document.getElementById('nope');
 var love = document.getElementById('love');
-let htmlTemplate = '<a href="{1}"><div class="tinder--card"><img src="{3}"><h3>{2}</h3><p>This is a demo for Tinder like swipe cards</p></div></a>' // 1: x.url 2: x.title 3: x.image_url
 
-
-/* Function to format strings like in Python */
-function format(fmt, ...args) {
-    if (!fmt.match(/^(?:(?:(?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{[0-9]+\}))+$/)) {
-        throw new Error('invalid format string.');
-    }
-    return fmt.replace(/((?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{([0-9]+)\})/g, (m, str, index) => {
-        if (str) {
-            return str.replace(/(?:{{)|(?:}})/g, m => m[0]);
-        } else {
-            if (index >= args.length) {
-                throw new Error('argument index is out of range in format');
-            }
-            return args[index];
-        }
-    });
-}
-
-async function loadHN(htmlTemplate, type = "news", page=1) {
+async function loadHN(type = "news", page=1) {
   console.log('started loading posts')
   let e = document.getElementById('cardholder')
   let baseUrl = 'https://hackerfeed.dev/'+type+'?page='+page
@@ -38,10 +19,10 @@ async function loadHN(htmlTemplate, type = "news", page=1) {
     .then((data) => {
       for(const post of data) {
         console.log(post)
-        e.inserAdjacentHTML('beforeend', format(htmlTemplate, post.url, post.title, post.image_url))
+        e.inserAdjacentHTML('beforeend', `<a href="${post.url}"><div class="tinder--card"><img src="${post.image_url}"><h3>${post.title}</h3><p>This is a demo for Tinder like swipe cards</p></div></a>`)
       }
     })
-    .then(main(htmlTemplate))
+    .then(main())
   }
 
 function initCards(card, index) {
@@ -79,9 +60,9 @@ function createButtonListener(love) {
   };
 }
 
-loadHN(htmlTemplate=htmlTemplate);
+loadHN();
 
-function main(htmlTemplate) {
+function main() {
   initCards();
 
   allCards.forEach(function (el) {
