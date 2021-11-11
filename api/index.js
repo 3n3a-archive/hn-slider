@@ -10,7 +10,7 @@ app.use(cors())
 app.get('/lp/', (req, res) => {
   let url = req.query.q
   let key = req.query.key
-  if (url != null) {
+  if (url != null && url != '' && url != ' ') {
     getLinkPreview(url).then((data) =>
       res.json(data)
     );
