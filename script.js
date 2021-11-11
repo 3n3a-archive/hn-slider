@@ -24,7 +24,13 @@ async function loadHN(type = "news", page=1) {
 async function getLinkPreview(url) {
   let baseAPI = window.location.origin + '/lp'
   let apiKey = "3756e0341fa1edf43b23bff4e09baad1"
-  let res = await fetch(`${baseAPI}?key=${apiKey}&q=${url}`)
+  let res = await fetch(`${baseAPI}?key=${apiKey}&q=${url}`, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'omit',
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',})
   let json = await res.json()
   return json
 }
