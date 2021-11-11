@@ -1,36 +1,37 @@
-async function loadHN(type = "news", page=1) {
+async function loadHN(type = "news", page = 1) {
   console.log('started loading posts')
   let e = document.getElementById('cardholder')
-  let baseUrl = 'https://hackerfeed.dev/'+type+'?page='+page
+  let baseUrl = 'https://hackerfeed.dev/' + type + '?page=' + page
   fetch(baseUrl, {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'omit',
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-    })
+    method: 'GET',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'omit',
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  })
     .then(res => res.json())
     .then(async (data) => {
-      for(const post of data) {
+      for (const post of data) {
         // console.log(post)
         let lp = await getLinkPreview(post.url)
         e.innerHTML += `<div class="tinder--card" data-url="${post.url}" data-title="${post.title}"><img src="${post.image_url ? post.image_url : lp.images[0]}"><h3>${post.title}</h3><p>${lp.description ? lp.description : `<a href="${post.url}">${post.domain}</a>`}</p></div>`
       }
       main()
     })
-  }
+}
 
 async function getLinkPreview(url) {
   let baseAPI = window.location.origin + '/lp'
   let apiKey = "3756e0341fa1edf43b23bff4e09baad1"
   let res = await fetch(`${baseAPI}?key=${apiKey}&q=${url}`, {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'omit',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',})
+    method: 'GET',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'omit',
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  })
   let json = await res.json()
   return json
 }
@@ -46,9 +47,9 @@ async function getLinkPeek(url) {
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
       headers: {
-        'X-API-Key':apiKey, 
-        'Content-Type':'application/json'
-      }, 
+        'X-API-Key': apiKey,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         "link": url
       })
@@ -70,7 +71,7 @@ function initCards(card, index) {
     card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 30 * index + 'px)';
     card.style.opacity = (10 - index) / 10;
   });
-  
+
   tinderContainer.classList.add('loaded');
 }
 
@@ -87,7 +88,7 @@ function createButtonListener(love) {
 
     if (love) {
       card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
-      window.open(card.dataset.url,card.dataset.title)
+      window.open(card.dataset.url, card.dataset.title)
     } else {
       card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
     }
@@ -153,7 +154,7 @@ function main() {
 
         if (toX > 0) {
           // love
-          window.open(event.target.dataset.url,event.target.dataset.title)
+          window.open(event.target.dataset.url, event.target.dataset.title)
         } else {
           // no love
         }

@@ -1,6 +1,8 @@
 const {getLinkPreview} = require('link-preview-js')
 const express = require('express')
 const cors = require('cors')
+const {loadHN, createOutput} = require('./lib');
+
 const app = express()
 const port = 80
 
@@ -20,7 +22,12 @@ app.get('/lp/', (req, res) => {
   
 })
 
+app.get('/', async (req, res) => {
+  let hnPosts_raw = await loadHN();
+  let hnPosts_wData = await createOutput(hnPosts_raw);
 
+  res.render(hnPosts_wData)
+})
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
