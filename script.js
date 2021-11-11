@@ -30,7 +30,7 @@ async function getLinkPreview(url) {
       cache: 'no-cache',
       credentials: 'omit',
       redirect: 'follow',
-      referrerPolicy: 'no-referrer')
+      referrerPolicy: 'no-referrer',})
   let json = await res.json()
   return json
 }
