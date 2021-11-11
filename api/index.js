@@ -2,7 +2,7 @@ const {getLinkPreview} = require('link-preview-js')
 const express = require('express')
 const cors = require('cors')
 const app = express()
-const port = 5000
+const port = 80
 
 app.use(express.static('../'))
 app.use(cors())
