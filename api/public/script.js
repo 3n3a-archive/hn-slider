@@ -25,7 +25,7 @@ function createButtonListener(love) {
 
     if (love) {
       card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
-      window.open(card.dataset.url, card.dataset.title)
+      window.open(card.dataset.url)
     } else {
       card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
     }
@@ -89,7 +89,7 @@ allCards.forEach(function (el) {
 
       if (toX > 0) {
         // love
-        window.open(event.target.dataset.url, event.target.dataset.title)
+        window.open(event.target.dataset.url)
       } else {
         // no love
       }
