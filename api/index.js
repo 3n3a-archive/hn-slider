@@ -11,6 +11,9 @@ app.use(cors())
 app.set('view engine', 'hbs');
 app.set('views', __dirname + '/templates');
 
+let hnPosts_raw = await loadHN();
+let hnPosts_wData = await createOutput(hnPosts_raw);
+
 app.get('/lp/', (req, res) => {
   let url = req.query.q
   let key = req.query.key
@@ -25,22 +28,14 @@ app.get('/lp/', (req, res) => {
 })
 
 app.get('/hn/lp', async (req, res) => {
-  let hnPosts_raw = await loadHN();
-  let hnPosts_wData = await createOutput(hnPosts_raw);
-
   res.json(hnPosts_wData)
 })
 
 app.get('/hn', async (req, res) => {
-  let hnPosts_raw = await loadHN();
-
   res.json(hnPosts_raw)
 })
 
 app.get('/', async (req, res) => {
-  let hnPosts_raw = await loadHN();
-  let hnPosts_wData = await createOutput(hnPosts_raw);
-
   res.render('index', {posts: hnPosts_wData})
 })
 
