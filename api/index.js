@@ -4,10 +4,12 @@ const cors = require('cors')
 const {loadHN, createOutput} = require('./lib');
 
 const app = express()
-const port = 80
+const port = 8000
 
-app.use(express.static('../'))
+app.use(express.static(__dirname + '/public'))
 app.use(cors())
+app.set('view engine', 'hbs');
+app.set('views', __dirname + '/templates');
 
 app.get('/lp/', (req, res) => {
   let url = req.query.q
@@ -26,7 +28,7 @@ app.get('/', async (req, res) => {
   let hnPosts_raw = await loadHN();
   let hnPosts_wData = await createOutput(hnPosts_raw);
 
-  res.render(hnPosts_wData)
+  res.render('index', {posts: hnPosts_wData})
 })
 
 app.listen(port, () => {

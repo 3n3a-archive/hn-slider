@@ -1,4 +1,5 @@
 const { getLinkPreview } = require('link-preview-js')
+const fetch = require('cross-fetch');
 
 async function loadHN(type = "news", page = 1) { 
     let options = {
@@ -27,9 +28,9 @@ async function getOG(url) {
 
 async function createOutput(hnPosts) {
     for (const post of hnPosts) {
-        let lp = await getOG(post.url)
-        post.image_url ? post.image_url : lp.images[0]
-        post.description = lp.description ? lp.description : post.domain
+        let lp = {description: "testtestset", images: ["https://source.unsplash.com/random/600x300"]}//await getOG(post.url)
+        post.image_url ? post.image_url : post.image_url = lp.images[0]
+        lp.description ? post.description = lp.description : post.description = post.domain
     }
     return hnPosts
 }
