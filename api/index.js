@@ -11,8 +11,9 @@ app.use(cors())
 app.set('view engine', 'hbs');
 app.set('views', __dirname + '/templates');
 
-let hnPosts_raw = await loadHN();
-let hnPosts_wData = await createOutput(hnPosts_raw);
+let hnPosts_raw
+let hnPosts_wData
+
 
 app.get('/lp/', (req, res) => {
   let url = req.query.q
@@ -39,6 +40,9 @@ app.get('/', async (req, res) => {
   res.render('index', {posts: hnPosts_wData})
 })
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Example app listening at http://localhost:${port}`)
+  hnPosts_raw = await loadHN();
+  hnPosts_wData = await createOutput(hnPosts_raw);
+
 })
