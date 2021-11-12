@@ -3,7 +3,7 @@ function initCards(card, index) {
   var allCards = document.querySelectorAll('.tinder--card');
   var tinderContainer = document.querySelector('.tinder');
 
-  newCards.forEach(function (card, index) {
+  newCards.forEach(async function (card, index) {
     card.style.zIndex = allCards.length - index;
     card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 30 * index + 'px)';
     card.style.opacity = (10 - index) / 10;

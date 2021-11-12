@@ -5,7 +5,8 @@
 }
 
 body {
-  background: #CCFBFE;
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(1,74,113,1) 31%, rgba(0,212,255,1) 100%);
   overflow: hidden;
   font-family: sans-serif;
 }
@@ -92,6 +93,11 @@ body {
   pointer-events: none;
 }
 
+.tinder--image {
+  height: 200px;
+  object-fit: scale-down;
+}
+
 .tinder--card h3 {
   margin-top: 32px;
   font-size: 32px;
@@ -110,6 +116,7 @@ body {
   flex: 0 0 100px;
   text-align: center;
   padding-top: 20px;
+  z-index: 1;
 }
 
 .tinder--buttons button {

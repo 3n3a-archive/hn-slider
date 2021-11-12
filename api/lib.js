@@ -17,19 +17,49 @@ async function loadHN(type = "news", page = 1) {
 }
 
 async function getOG(url) {
-    if (url != null && url != '') {
-        let res = await getLinkPreview(url)
-        return res;
-    } else {
-        console.error("Emtpy URL provided to getOG")
-        return
-    }
+    let res = await fetch(`https://v1.nocodeapi.com/123123/link_preview/iBYcXGNUXMyqzPbn?url=${url}`)
+    let json = await res.json()
+    return json
 }
 
 async function createOutput(hnPosts) {
     for (const post of hnPosts) {
-        let lp = {description: "testtestset", images: ["https://source.unsplash.com/random/600x300"]}//await getOG(post.url)
-        post.image_url ? post.image_url : post.image_url = lp.images[0]
+        if (post.url != undefined || post.url != '') {
+            try {
+                let data = await getLinkPreview(post.url, {
+                    imagesPropertyType: "og",
+                    headers: {
+                      "user-agent": "Twitterbot", 
+                    },
+                    timeout: 100000
+                  })
+
+                if (post.image_url != undefined) {
+                    continue
+                } else if (data.hasOwnProperty("images")) {
+                    post.image_url = data.images[0]
+                } else {
+                    post.image_url = "https://www.google.com/s2/favicons?domain="+post.domain
+                }
+
+                if (data.hasOwnProperty("description")) {
+                    post.description = data.description
+                } else {
+                    post.description = post.domain
+                }
+            } catch (error) {
+                console.log(`get Link outer catch ${error}`)
+            }
+        } 
+    }
+    return hnPosts
+}
+
+async function createOutputLP2(hnPosts) {
+    for (const post of hnPosts) {
+        let lp = await getOG(post.url)
+        post.image_url ? post.image_url : 
+            lp.image ? post.image_url = lp.image : post.image_url = lp.logo
         lp.description ? post.description = lp.description : post.description = post.domain
     }
     return hnPosts

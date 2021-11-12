@@ -19,9 +19,13 @@
   <div class="tinder--cards" id="cardholder">
       {{#each posts}}
         <div class="tinder--card" data-url="{{url}}" data-title="{{title}}">
-            <img src="{{image_url}}">
+            <img class="tinder--image" src="{{image_url}}">
             <h3>{{title}}</h3>
-            <p>{{description}}</p>
+            <p>
+                <img src="https://www.google.com/s2/favicons?domain={{domain}}">
+                <span>{{domain}}</span><br>
+                {{description}}
+            </p>
         </div>
       {{/each}}
   </div>
