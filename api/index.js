@@ -4,7 +4,7 @@ const cors = require('cors')
 const {loadHN, createOutput} = require('./lib');
 
 const app = express()
-const port = 8000
+const port = 80
 
 app.use(express.static(__dirname + '/public'))
 app.use(cors())
