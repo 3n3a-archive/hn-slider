@@ -1,5 +1,6 @@
 const { getLinkPreview } = require('link-preview-js')
 const fetch = require('cross-fetch');
+const fs = require('fs');
 
 async function loadHN(type = "news", page = 1) { 
     let options = {
@@ -16,10 +17,21 @@ async function loadHN(type = "news", page = 1) {
     return json;
 }
 
-async function getOG(url) {
-    let res = await fetch(`https://v1.nocodeapi.com/123123/link_preview/iBYcXGNUXMyqzPbn?url=${url}`)
-    let json = await res.json()
-    return json
+function getHN(savePath) {
+    let rawdata = fs.readFileSync(savePath);
+    let posts = JSON.parse(rawdata);
+    return posts;
+}
+
+async function saveHN(posts, savePath) {
+    let data = JSON.stringify(posts);
+    fs.writeFileSync(savePath, data);
+}
+
+async function updateHN(savePath) {
+    hnPosts_raw = await loadHN();
+    hnPosts_wData = await createOutput(hnPosts_raw);
+    await saveHN(hnPosts_wData, savePath)
 }
 
 async function createOutput(hnPosts) {
@@ -55,17 +67,7 @@ async function createOutput(hnPosts) {
     return hnPosts
 }
 
-async function createOutputLP2(hnPosts) {
-    for (const post of hnPosts) {
-        let lp = await getOG(post.url)
-        post.image_url ? post.image_url : 
-            lp.image ? post.image_url = lp.image : post.image_url = lp.logo
-        lp.description ? post.description = lp.description : post.description = post.domain
-    }
-    return hnPosts
-}
-
 module.exports = {
-    loadHN,
-    createOutput
+    updateHN,
+    getHN
 }

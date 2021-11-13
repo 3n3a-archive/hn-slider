@@ -1,19 +1,26 @@
 const {getLinkPreview} = require('link-preview-js')
 const express = require('express')
 const cors = require('cors')
-const {loadHN, createOutput} = require('./lib');
+const {getHN} = require('./lib');
+const Bree = require('bree');
 
+const bree = new Bree ({
+  jobs: [
+    {
+      name: "updateHN",
+      timeout: '1s',
+      interval: '5m'
+    }
+  ]
+})
 const app = express()
 const port = 8000
+let savePath = "./hnposts.json"
 
 app.use(express.static(__dirname + '/public'))
 app.use(cors())
 app.set('view engine', 'hbs');
 app.set('views', __dirname + '/templates');
-
-let hnPosts_raw
-let hnPosts_wData
-
 
 app.get('/lp/', (req, res) => {
   let url = req.query.q
@@ -29,23 +36,14 @@ app.get('/lp/', (req, res) => {
 })
 
 app.get('/hn/lp', async (req, res) => {
-  res.json(hnPosts_wData)
-})
-
-app.get('/hn', async (req, res) => {
-  res.json(hnPosts_raw)
+  res.json(getHN(savePath))
 })
 
 app.get('/', async (req, res) => {
-  res.render('index', {posts: hnPosts_wData})
+  res.render('index', {posts: getHN(savePath), ModalTitle: "User Manual", ModalContent: "This unique Hackernews Client allows you to not only read what's going on, but also to see (with images). <br>If you just want to get to the next card <strong>Swipe Left</strong>, but if you are interested in reading more about a post <strong>Swipe Right</strong> and the link to that post will open in a new tab."})
 })
-
-async function updateHN() {
-  hnPosts_raw = await loadHN();
-  hnPosts_wData = await createOutput(hnPosts_raw);
-}
 
 app.listen(port, async () => {
   console.log(`Example app listening at http://localhost:${port}`)
-  updateHN()
+  bree.start()
 })
