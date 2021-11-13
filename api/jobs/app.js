@@ -1,17 +1,15 @@
 const {getLinkPreview} = require('link-preview-js')
 const express = require('express')
 const cors = require('cors')
-const {loadHN, createOutput} = require('./lib');
- const Bree = require('bree')
-const bree = new Bree({
+const {loadHN, createOutput} = require('../lib');
 
 const app = express()
 const port = 8000
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static('../public'))
 app.use(cors())
 app.set('view engine', 'hbs');
-app.set('views', __dirname + '/templates');
+app.set('views','../templates');
 
 let hnPosts_raw
 let hnPosts_wData
@@ -46,15 +44,4 @@ app.listen(port, async () => {
   console.log(`Example app listening at http://localhost:${port}`)
   hnPosts_raw = await loadHN();
   hnPosts_wData = await createOutput(hnPosts_raw);
-
-  jobs : [
-    // runs the job on Start
-      'test',
-      {
-        name : 'sample',
-        interval : '5m'
-      }
-    ]
-  })
-  bree.start()
 })
