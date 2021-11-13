@@ -2,6 +2,7 @@
 const bree = new Bree({jobs : [
       {
         name : 'app',
+        path: updateHN,
         interval : '5m'
       }
     ]
@@ -11,15 +12,15 @@ bree.start()
 const {getLinkPreview} = require('link-preview-js')
 const express = require('express')
 const cors = require('cors')
-const {loadHN, createOutput} = require('../lib');
+const {loadHN, createOutput} = require('./lib');
 
 const app = express()
 const port = 8000
 
-app.use(express.static(__dirname+'/public'))
+app.use(express.static(__dirname + '/public'))
 app.use(cors())
 app.set('view engine', 'hbs');
-app.set('views','../templates');
+app.set('views', __dirname + '/templates');
 
 let hnPosts_raw
 let hnPosts_wData
@@ -50,9 +51,12 @@ app.get('/', async (req, res) => {
   res.render('index', {posts: hnPosts_wData})
 })
 
-app.listen(port, async () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+async function updateHN() {
   hnPosts_raw = await loadHN();
   hnPosts_wData = await createOutput(hnPosts_raw);
-})
+}
 
+app.listen(port, async () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+  updateHN()
+})
