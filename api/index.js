@@ -1,14 +1,3 @@
- const Bree = require('bree')
-const bree = new Bree({jobs : [
-      {
-        name : 'app',
-        path: updateHN,
-        interval : '5m'
-      }
-    ]
-  })
-bree.start()
-
 const {getLinkPreview} = require('link-preview-js')
 const express = require('express')
 const cors = require('cors')
