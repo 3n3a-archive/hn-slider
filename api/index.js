@@ -2,6 +2,8 @@ const {getLinkPreview} = require('link-preview-js')
 const express = require('express')
 const cors = require('cors')
 const {loadHN, createOutput} = require('./lib');
+ const Bree = require('bree')
+const bree = new Bree({
 
 const app = express()
 const port = 8000
@@ -45,4 +47,14 @@ app.listen(port, async () => {
   hnPosts_raw = await loadHN();
   hnPosts_wData = await createOutput(hnPosts_raw);
 
+  jobs : [
+    // runs the job on Start
+      'test',
+      {
+        name : 'sample',
+        interval : '5m'
+      }
+    ]
+  })
+  bree.start()
 })
