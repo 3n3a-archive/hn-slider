@@ -1,15 +1,17 @@
 # hn-slider
 
-A Hacker news client, which pulls its data from <hackerfeed.dev>'s API and combines it with OpenGraph descriptions and images if none already present on Hacker news
+A Hacker news client, which pulls its data from [hackerfeed.dev](hackerfeed.dev)'s API and combined it with OpenGraph descriptions and images if none already present on Hacker news
 Finally the Frontend is built on the server for improved performance. 
 
 ## Todo
 
-- [] Add OpenGraph Data so looks nice when sharing
-- [] Add title and link to GH
-- [] Fix bugs with sliding on iOS
-- [] Create a dedicated API
-- [] Create a version like hnfee_mdb, allow switching
+- [ ] Add OpenGraph Data so looks nice when sharing
+- [ ] Add title and link to GH
+- [ ] Fix bugs with sliding on iOS
+- [ ] Create a dedicated API
+- [ ] Create a version like hnfee_mdb, allow switching
+- [ ] Fix HN Internal Posts not opening
+- [ ] Link to Comments -> API -> Modal
 
 ## Credits
 
